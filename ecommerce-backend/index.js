@@ -11,7 +11,7 @@ const User = require("./models/user.model");
 // Data Parsing
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
   })
 );
 app.use(cookieParser());
