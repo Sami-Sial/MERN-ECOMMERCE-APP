@@ -43,7 +43,7 @@ const UsersList = () => {
 
   const showModal = async (id) => {
     try {
-      const { data } = await axios.get("/api/v1/admin/user/" + id);
+      const { data } = await axios.get("https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/user/" + id);
 
       setUser(data.user);
     } catch (error) {
