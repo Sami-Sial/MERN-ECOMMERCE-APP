@@ -19,6 +19,7 @@ const Home = () => {
     (state) => state.productSlice
   );
   console.log(products);
+  console.log(products);
   useEffect(() => {
     dispatch(fetchProducts());
 

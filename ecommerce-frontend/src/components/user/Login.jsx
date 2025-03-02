@@ -25,6 +25,7 @@ const Login = () => {
   const { loading, loginSuccess, user, loginError } = useSelector(
     (state) => state.userSlice
   );
+  console.log(loading);
 
   const loginSubmit = async (e) => {
     e.preventDefault();

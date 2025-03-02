@@ -11,7 +11,7 @@ const Loader = () => {
           height: "100vh",
         }}
       >
-        <Spinner size="lg" animation="border" variant="dark" />
+        <CircularProgress color="secondary" />
       </div>
     </>
   );
