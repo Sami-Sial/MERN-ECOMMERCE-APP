@@ -7,7 +7,7 @@ export const fetchFilteredProducts = createAsyncThunk(
   async ({ category, brand, price, ratings, currentPage }) => {
     try {
       const { data } = await axios.get(
-        `/api/v1/products/filtered?category=${category}&brand=${brand}&price=${price}&ratings=${ratings}&currentPage=${currentPage}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/products/filtered?category=${category}&brand=${brand}&price=${price}&ratings=${ratings}&currentPage=${currentPage}`
       );
       console.log(data);
       return data;
@@ -20,7 +20,9 @@ export const fetchFilteredProducts = createAsyncThunk(
 
 export const fetchProducts = createAsyncThunk("fetchProducts", async () => {
   try {
-    const { data } = await axios.get(`/api/v1/products`);
+    const { data } = await axios.get(
+      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/products"
+    );
     return data;
   } catch (error) {
     console.log(error);
@@ -33,7 +35,9 @@ export const fetchProductDetails = createAsyncThunk(
   "fetchProductDetails",
   async (id) => {
     try {
-      const { data } = await axios.get(`/api/v1/product/${id}`);
+      const { data } = await axios.get(
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/product/${id}`
+      );
       console.log(data);
       return data;
     } catch (error) {
@@ -49,7 +53,7 @@ export const newReview = createAsyncThunk(
   async ({ rating, comment, productId }) => {
     try {
       const { data } = await axios.put(
-        "/api/v1/review",
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/review",
         { rating, comment, productId },
         { headers: { "Content-Type": "application/json" } }
       );

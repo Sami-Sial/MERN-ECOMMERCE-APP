@@ -12,6 +12,7 @@ import ProductCarousel from "./ProductCarousel.jsx";
 import Carousel from "react-bootstrap/Carousel";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Loader from "../layout/Loader.jsx";
 
 import { useSelector, useDispatch } from "react-redux";
 import { addItemsToCart } from "../../redux-toolkit/slices/user.slice.jsx";
@@ -30,7 +31,7 @@ const ProductDetails = () => {
   const [reviewModalShow, setReviewModalShow] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const { product, error, reviewSuccess } = useSelector(
+  const { product, error, reviewSuccess, loading } = useSelector(
     (state) => state.productSlice
   );
   const { addedToCartSuccess } = useSelector((state) => state.userSlice);
@@ -96,155 +97,169 @@ const ProductDetails = () => {
 
       <main>
         {/* product details */}
-        {product && (
+        {loading ? (
+          <Loader />
+        ) : (
           <>
-            <div className="product-details">
-              <div>
-                <ProductCarousel product={product} />
-              </div>
+            {product && (
+              <>
+                <div className="product-details">
+                  <div>
+                    <ProductCarousel product={product} />
+                  </div>
 
-              <div style={{ maxWidth: "60vw", minWidth: "40vw" }}>
-                <h5>{product.name}</h5>
-                <span style={{ display: "flex", gap: "1rem" }}>
-                  <p>Category : {product.category}</p>
-                  <p>Brand : {product.brand}Adidas</p>
-                </span>
-                <p style={{ color: "red" }}>Price : &#x24;{product.price}</p>
-                <Stack spacing={1}>
-                  <Rating
-                    name="half-rating-read"
-                    defaultValue={product.ratings}
-                    precision={0.5}
-                    readOnly
-                  />
-                </Stack>
-                {product.stock >= 1 ? (
-                  <p style={{ color: "green" }}>Status : In Stock</p>
-                ) : (
-                  <p style={{ color: "red" }}>Status : Out Of Stcok</p>
-                )}
-                <p>Description : {product.description}</p>
+                  <div style={{ maxWidth: "60vw", minWidth: "40vw" }}>
+                    <h5>{product.name}</h5>
+                    <span style={{ display: "flex", gap: "1rem" }}>
+                      <p>Category : {product.category}</p>
+                      <p>Brand : {product.brand}Adidas</p>
+                    </span>
+                    <p style={{ color: "red" }}>
+                      Price : &#x24;{product.price}
+                    </p>
+                    <Stack spacing={1}>
+                      <Rating
+                        name="half-rating-read"
+                        defaultValue={product.ratings}
+                        precision={0.5}
+                        readOnly
+                      />
+                    </Stack>
+                    {product.stock >= 1 ? (
+                      <p style={{ color: "green" }}>Status : In Stock</p>
+                    ) : (
+                      <p style={{ color: "red" }}>Status : Out Of Stcok</p>
+                    )}
+                    <p>Description : {product.description}</p>
 
-                <br />
+                    <br />
 
-                <Button
-                  size="sm"
-                  variant="dark"
-                  onClick={() => setReviewModalShow(true)}
-                >
-                  Add Review
-                </Button>
+                    <Button
+                      size="sm"
+                      variant="dark"
+                      onClick={() => setReviewModalShow(true)}
+                    >
+                      Add Review
+                    </Button>
 
-                <div style={{ marginTop: "20px", fontWeight: "bold" }}>
-                  <p>Shop Now</p>
-                  <button
-                    style={{ padding: "2px 5px", borderRadius: "5px" }}
-                    onClick={decreaseQuantity}
-                  >
-                    -
-                  </button>
-                  <input
-                    style={{
-                      width: "100px",
-                      margin: "0 10px",
-                      padding: "0 10px",
-                    }}
-                    readOnly
-                    type="number"
-                    value={quantity}
-                  />
-                  <button
-                    style={{
-                      padding: "2px 5px",
-                      borderRadius: "5px",
-                      marginRight: "15px",
-                    }}
-                    onClick={increaseQuantity}
-                  >
-                    +
-                  </button>
+                    <div style={{ marginTop: "20px", fontWeight: "bold" }}>
+                      <p>Shop Now</p>
+                      <button
+                        style={{ padding: "2px 5px", borderRadius: "5px" }}
+                        onClick={decreaseQuantity}
+                      >
+                        -
+                      </button>
+                      <input
+                        style={{
+                          width: "100px",
+                          margin: "0 10px",
+                          padding: "0 10px",
+                        }}
+                        readOnly
+                        type="number"
+                        value={quantity}
+                      />
+                      <button
+                        style={{
+                          padding: "2px 5px",
+                          borderRadius: "5px",
+                          marginRight: "15px",
+                        }}
+                        onClick={increaseQuantity}
+                      >
+                        +
+                      </button>
 
-                  <Button size="sm" variant="dark" onClick={addProductsToCart}>
-                    Add To Cart
-                  </Button>
+                      <Button
+                        size="sm"
+                        variant="dark"
+                        onClick={addProductsToCart}
+                      >
+                        Add To Cart
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* reviews */}
-            <h5 style={{ textAlign: "center", marginTop: "1rem" }}>Reviews</h5>
+                {/* reviews */}
+                <h5 style={{ textAlign: "center", marginTop: "1rem" }}>
+                  Reviews
+                </h5>
 
-            {product.reviews && product.reviews[0] ? (
-              <div className="reviews">
-                {product.reviews && (
-                  <Carousel
-                    indicators={false}
-                    variant="dark"
-                    style={{
-                      width: "50vw",
-                      height: "auto",
-                      border: "1px solid black",
-                      borderRadius: "10px",
-                      padding: "10px",
-                      margin: "1rem auto",
-                    }}
-                  >
-                    {product.reviews.map((review) => (
-                      <Carousel.Item>
-                        <ReviewCard key={review._id} review={review} />
-                      </Carousel.Item>
-                    ))}
-                  </Carousel>
+                {product.reviews && product.reviews[0] ? (
+                  <div className="reviews">
+                    {product.reviews && (
+                      <Carousel
+                        indicators={false}
+                        variant="dark"
+                        style={{
+                          width: "50vw",
+                          height: "auto",
+                          border: "1px solid black",
+                          borderRadius: "10px",
+                          padding: "10px",
+                          margin: "1rem auto",
+                        }}
+                      >
+                        {product.reviews.map((review) => (
+                          <Carousel.Item>
+                            <ReviewCard key={review._id} review={review} />
+                          </Carousel.Item>
+                        ))}
+                      </Carousel>
+                    )}
+                  </div>
+                ) : (
+                  <p style={{ textAlign: "center", fontSize: "18px" }}>
+                    No Reviews Yet
+                  </p>
                 )}
-              </div>
-            ) : (
-              <p style={{ textAlign: "center", fontSize: "18px" }}>
-                No Reviews Yet
-              </p>
-            )}
 
-            {/* review modal */}
-            <Modal
-              show={reviewModalShow}
-              onHide={() => setReviewModalShow(false)}
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>Add Review</Modal.Title>
-              </Modal.Header>
-
-              <Modal.Body>
-                <Stack spacing={1}>
-                  Rating
-                  <Rating
-                    name="half-rating"
-                    defaultValue={rating}
-                    onChange={(e) => setRating(e.target.value)}
-                    precision={0.5}
-                  />
-                </Stack>
-                <label htmlFor="comment">Comment</label> <br />
-                <textarea
-                  name=""
-                  style={{
-                    width: "400px",
-                    height: "150px",
-                    padding: "10px",
-                    fontSize: "17px",
-                  }}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  id="comment"
+                {/* review modal */}
+                <Modal
+                  show={reviewModalShow}
+                  onHide={() => setReviewModalShow(false)}
                 >
-                  Comment
-                </textarea>
-              </Modal.Body>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Add Review</Modal.Title>
+                  </Modal.Header>
 
-              <Modal.Footer>
-                <Button variant="secondary" onClick={submitReview}>
-                  Submit Review
-                </Button>
-              </Modal.Footer>
-            </Modal>
+                  <Modal.Body>
+                    <Stack spacing={1}>
+                      Rating
+                      <Rating
+                        name="half-rating"
+                        defaultValue={rating}
+                        onChange={(e) => setRating(e.target.value)}
+                        precision={0.5}
+                      />
+                    </Stack>
+                    <label htmlFor="comment">Comment</label> <br />
+                    <textarea
+                      name=""
+                      style={{
+                        width: "400px",
+                        height: "150px",
+                        padding: "10px",
+                        fontSize: "17px",
+                      }}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      id="comment"
+                    >
+                      Comment
+                    </textarea>
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={submitReview}>
+                      Submit Review
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </>
+            )}
           </>
         )}
       </main>

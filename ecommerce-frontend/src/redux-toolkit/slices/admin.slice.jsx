@@ -6,7 +6,7 @@ export const getAllOrders = createAsyncThunk(
   async (currentPage) => {
     try {
       const { data } = await axios.get(
-        `/api/v1/admin/orders?currentPage=${currentPage}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/orders?currentPage=${currentPage}`
       );
       console.log(data);
       return data;
@@ -19,7 +19,9 @@ export const getAllOrders = createAsyncThunk(
 
 export const processOrder = createAsyncThunk("processOrder", async (id) => {
   try {
-    const { data } = await axios.put(`/api/v1/admin/order/${id}`);
+    const { data } = await axios.put(
+      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/order/${id}`
+    );
     console.log(data);
     return data;
   } catch (error) {
@@ -30,7 +32,9 @@ export const processOrder = createAsyncThunk("processOrder", async (id) => {
 
 export const deleteOrder = createAsyncThunk("deleteOrder", async (id) => {
   try {
-    const { data } = await axios.delete(`/api/v1/admin/order/${id}`);
+    const { data } = await axios.delete(
+      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/order/${id}`
+    );
     console.log(data);
     return data;
   } catch (error) {
@@ -44,7 +48,7 @@ export const getAllUsers = createAsyncThunk(
   async (currentPage) => {
     try {
       const { data } = await axios.get(
-        `/api/v1/admin/users?currentPage=${currentPage}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/users?currentPage=${currentPage}`
       );
       console.log(data);
       return data;
@@ -57,7 +61,10 @@ export const getAllUsers = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk("deleteUser", async (id) => {
   try {
-    const { data } = await axios.delete("/api/v1/admin/user/" + id);
+    const { data } = await axios.delete(
+      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/user/" +
+        id
+    );
     console.log(data);
     return data;
   } catch (error) {
@@ -71,7 +78,8 @@ export const updateUserRole = createAsyncThunk(
   async ({ id, role }) => {
     try {
       const { data } = await axios.put(
-        "/api/v1/admin/user/" + id,
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/user/" +
+          id,
         { id, role },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -89,7 +97,7 @@ export const getAdminProducts = createAsyncThunk(
   async (currentPage) => {
     try {
       const { data } = await axios.get(
-        `/api/v1/admin/products?currentPage=${currentPage}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/products?currentPage=${currentPage}`
       );
       console.log(data);
       return data;
@@ -106,7 +114,7 @@ export const createProduct = createAsyncThunk(
     console.log(images);
     try {
       const { data } = await axios.post(
-        "/api/v1/admin/product/new",
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/new",
         { name, price, description, category, stock, images },
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -125,9 +133,14 @@ export const updateProduct = createAsyncThunk(
   async ({ myForm, id }) => {
     console.log(myForm);
     try {
-      const { data } = await axios.put("/api/v1/admin/product/" + id, myForm, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { data } = await axios.put(
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/" +
+          id,
+        myForm,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       console.log(data);
       return data;
     } catch (error) {
@@ -140,7 +153,9 @@ export const updateProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk("deleteProduct", async (id) => {
   try {
-    const { data } = await axios.delete(`/api/v1/admin/product/${id}`);
+    const { data } = await axios.delete(
+      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/${id}`
+    );
     console.log(data);
     return data;
   } catch (error) {

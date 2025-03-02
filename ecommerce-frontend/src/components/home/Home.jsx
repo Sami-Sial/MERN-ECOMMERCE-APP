@@ -9,15 +9,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchProducts } from "../../redux-toolkit/slices/product.slice";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Loader from "../layout/Loader";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { products } = useSelector((state) => state.productSlice);
+  const { products, loading, error } = useSelector(
+    (state) => state.productSlice
+  );
   console.log(products);
   useEffect(() => {
     dispatch(fetchProducts());
-  }, [dispatch]);
+
+    if (error) {
+      toast.error(error);
+    }
+  }, [dispatch, error]);
 
   return (
     <>
@@ -39,57 +47,66 @@ const Home = () => {
             Featured Products
           </h3>
 
-          <div className="products-wrapper">
-            {products &&
-              products.length &&
-              products.map(
-                (product) =>
-                  product.featured && (
-                    <div
-                      style={{ position: "relative" }}
-                      className="product"
-                      key={product._id}
-                    >
-                      <FavoriteIcon
-                        style={{
-                          position: "absolute",
-                          left: "10px",
-                          top: "0px",
-                          color: "gray",
-                        }}
-                      />
-                      <img
-                        onClick={() => navigate("/product/" + product._id)}
-                        src={product.images[0]?.url}
-                        alt=""
-                      />
-                      <h6>{product.name}</h6>
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              {" "}
+              <div className="products-wrapper">
+                {products &&
+                  products.length > 0 &&
+                  products.map(
+                    (product) =>
+                      product.featured && (
+                        <div
+                          style={{ position: "relative" }}
+                          className="product"
+                          key={product._id}
+                        >
+                          <FavoriteIcon
+                            style={{
+                              position: "absolute",
+                              left: "10px",
+                              top: "0px",
+                              color: "gray",
+                            }}
+                          />
+                          <img
+                            onClick={() => navigate("/product/" + product._id)}
+                            src={product.images[0]?.url}
+                            alt=""
+                          />
+                          <h6>{product.name}</h6>
 
-                      <span>
-                        <p>{product.category}</p>
-                        {product.brand ? <p>{product.brand}</p> : <></>}
-                      </span>
+                          <span>
+                            <p>{product.category}</p>
+                            {product.brand ? <p>{product.brand}</p> : <></>}
+                          </span>
 
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <p style={{ color: "red" }}>Price : ₹{product.price}</p>
-
-                        <div>
-                          {product.stock > 0 ? (
-                            <p style={{ color: "green" }}>Status : In Stock</p>
-                          ) : (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
                             <p style={{ color: "red" }}>
-                              Status : Out of Stock
+                              Price : ₹{product.price}
                             </p>
-                          )}
-                        </div>
-                      </div>
 
-                      {/* <div
+                            <div>
+                              {product.stock > 0 ? (
+                                <p style={{ color: "green" }}>
+                                  Status : In Stock
+                                </p>
+                              ) : (
+                                <p style={{ color: "red" }}>
+                                  Status : Out of Stock
+                                </p>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* <div
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -105,10 +122,12 @@ const Home = () => {
                       Add to Cart
                     </Button>
                   </div> */}
-                    </div>
-                  )
-              )}
-          </div>
+                        </div>
+                      )
+                  )}
+              </div>
+            </>
+          )}
         </div>
       </main>
       {/* <Footer /> */}

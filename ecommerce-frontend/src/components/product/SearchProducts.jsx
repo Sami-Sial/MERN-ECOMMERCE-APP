@@ -6,22 +6,27 @@ import Button from "react-bootstrap/esm/Button";
 import "./stylesheets/products.css";
 import PageTitle from "../layout/PageTitle";
 import { useNavigate } from "react-router-dom";
+import Loader from "../layout/Loader";
 
 const SearchProducts = () => {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const searcHandler = async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(
-        `/api/v1/products/searched?search_query=${search}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/products/searched?search_query=${search}`
       );
 
       setProducts(data.products);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response?.data?.message || error.message);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -59,43 +64,49 @@ const SearchProducts = () => {
         </div>
 
         <h4 style={{ textAlign: "center", margin: "1rem" }}>Search Results</h4>
-        <div className="products-wrapper">
-          {products && Array.isArray(products) ? (
-            products.map((product) => {
-              return (
-                <div className="product" key={product._id}>
-                  <img
-                    onClick={() => navigate("/product/" + product._id)}
-                    src={product.images[0].url}
-                    alt=""
-                  />
-                  <h6>{product.name}</h6>
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="products-wrapper">
+              {products && Array.isArray(products) ? (
+                products.map((product) => {
+                  return (
+                    <div className="product" key={product._id}>
+                      <img
+                        onClick={() => navigate("/product/" + product._id)}
+                        src={product.images[0].url}
+                        alt=""
+                      />
+                      <h6>{product.name}</h6>
 
-                  <span>
-                    <p>{product.category}</p>
-                    {product.brand ? <p>{product.brand}</p> : <></>}
-                  </span>
+                      <span>
+                        <p>{product.category}</p>
+                        {product.brand ? <p>{product.brand}</p> : <></>}
+                      </span>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <p style={{ color: "red" }}>
-                      Price : &#x24;{product.price}
-                    </p>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <p style={{ color: "red" }}>
+                          Price : &#x24;{product.price}
+                        </p>
 
-                    <div>
-                      {product.stock > 0 ? (
-                        <p style={{ color: "green" }}>Status : In Stock</p>
-                      ) : (
-                        <p style={{ color: "red" }}>Status : Out of Stock</p>
-                      )}
-                    </div>
-                  </div>
+                        <div>
+                          {product.stock > 0 ? (
+                            <p style={{ color: "green" }}>Status : In Stock</p>
+                          ) : (
+                            <p style={{ color: "red" }}>
+                              Status : Out of Stock
+                            </p>
+                          )}
+                        </div>
+                      </div>
 
-                  {/* <div
+                      {/* <div
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -111,15 +122,17 @@ const SearchProducts = () => {
                       Add to Cart
                     </Button>
                   </div> */}
-                </div>
-              );
-            })
-          ) : (
-            <h4 style={{ textAlign: "center", paddingTop: "4rem" }}>
-              No results found!
-            </h4>
-          )}
-        </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <h4 style={{ textAlign: "center", paddingTop: "4rem" }}>
+                  No results found!
+                </h4>
+              )}
+            </div>
+          </>
+        )}
       </main>
     </>
   );

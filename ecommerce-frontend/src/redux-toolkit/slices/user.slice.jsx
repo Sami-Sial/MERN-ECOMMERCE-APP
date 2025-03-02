@@ -7,7 +7,7 @@ export const signup = createAsyncThunk(
     console.log(avatar);
     try {
       const { data } = await axios.post(
-        "/api/v1/register",
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/register",
         { name, email, password, avatar },
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -26,7 +26,7 @@ export const signup = createAsyncThunk(
 export const login = createAsyncThunk("login", async ({ email, password }) => {
   try {
     const { data } = await axios.post(
-      "/api/v1/login",
+      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/login",
       { email, password },
       { headers: { "Content-Type": "application/json" } }
     );
@@ -43,7 +43,9 @@ export const login = createAsyncThunk("login", async ({ email, password }) => {
 
 export const logout = createAsyncThunk("logout", async () => {
   try {
-    const { data } = await axios.get("/api/v1/logout");
+    const { data } = await axios.get(
+      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/logout"
+    );
 
     console.log(data);
     return data;
@@ -56,8 +58,9 @@ export const logout = createAsyncThunk("logout", async () => {
 
 export const loadUser = createAsyncThunk("loadUser", async () => {
   try {
-    const { data } = await axios.get("/api/v1/me");
-
+    const { data } = await axios.get(
+      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/me"
+    );
     console.log(data);
     return data;
   } catch (error) {
@@ -72,9 +75,13 @@ export const updateProfile = createAsyncThunk(
     const sendedData = { name, email, avatar };
     console.log(sendedData);
     try {
-      const { data } = await axios.put("/api/v1/me/update", sendedData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { data } = await axios.put(
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/me/update",
+        sendedData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       console.log(data);
       return data;
@@ -91,7 +98,7 @@ export const updatePassword = createAsyncThunk(
   async ({ oldPassword, newPassword, confirmPassword }) => {
     try {
       const { data } = await axios.put(
-        `/api/v1/password/update`,
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/password/update`,
         { oldPassword, newPassword, confirmPassword },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -111,7 +118,7 @@ export const forgotPassword = createAsyncThunk(
   async (email) => {
     try {
       const { data } = await axios.post(
-        `/api/v1/password/forgot`,
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/password/forgot`,
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -131,7 +138,7 @@ export const resetPassword = createAsyncThunk(
   async ({ token, password, confirmPassword }) => {
     try {
       const { data } = await axios.put(
-        `http://localhost:8080/api/v1/password/reset/${token}`,
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/password/reset/${token}`,
         { token, password, confirmPassword },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -151,7 +158,9 @@ export const addItemsToCart = createAsyncThunk(
   "addItemsToCart",
   async ({ id, quantity = 1 }) => {
     try {
-      let url = "http://localhost:8080/api/v1/product/" + id;
+      let url =
+        "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/product/" +
+        id;
       const { data } = await axios.get(url);
 
       console.log(data);

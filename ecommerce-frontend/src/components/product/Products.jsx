@@ -22,7 +22,7 @@ const products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const { totalPages, products, loading } = useSelector(
+  const { totalPages, products, loading, error } = useSelector(
     (state) => state.productSlice
   );
 
@@ -39,36 +39,42 @@ const products = () => {
 
   useEffect(() => {
     dispatch(fetchFilteredProducts());
-  }, [dispatch]);
+
+    if (error) {
+      toast.error(error);
+    }
+  }, [dispatch, error]);
 
   console.log(products);
   return (
     <>
       <PageTitle title={"Ecommerec- Products"} />
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Header />
 
-          <main style={{ display: "flex" }}>
-            <Sidebar currentPage={currentPage} />
+      <Header />
 
-            <div
-              id="products"
-              className="content-wrapper"
-              style={{
-                flexGrow: "1",
-                padding: "1rem",
-                width: "calc(100vw - 200px)",
-                maxHeight: "calc(100vh - 3rem)",
-              }}
-            >
-              <h4 style={{ marginBottom: "2rem" }}>All Products</h4>
+      <main style={{ display: "flex" }}>
+        <Sidebar currentPage={currentPage} />
 
+        <div
+          id="products"
+          className="content-wrapper"
+          style={{
+            flexGrow: "1",
+            padding: "1rem",
+            width: "calc(100vw - 200px)",
+            maxHeight: "calc(100vh - 3rem)",
+          }}
+        >
+          <h4 style={{ marginBottom: "2rem" }}>All Products</h4>
+
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              {" "}
               <div className="products-wrapper">
                 {products &&
-                  products.length &&
+                  products.length > 0 &&
                   products.map((product) => {
                     return (
                       <div className="product" key={product._id}>
@@ -127,9 +133,8 @@ const products = () => {
                     );
                   })}
               </div>
-
               {/* pagination */}
-              {products && (
+              {totalPages > 1 && (
                 <div
                   style={{
                     display: "flex",
@@ -146,12 +151,12 @@ const products = () => {
                   </Stack>
                 </div>
               )}
-            </div>
-          </main>
+            </>
+          )}
+        </div>
+      </main>
 
-          {/* <Footer /> */}
-        </>
-      )}
+      {/* <Footer /> */}
     </>
   );
 };
