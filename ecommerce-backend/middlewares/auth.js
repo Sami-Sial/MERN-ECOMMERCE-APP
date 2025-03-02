@@ -15,20 +15,24 @@ const User = require("../models/user.model");
 //     next();
 // })
 
-module.exports.isAuthenticatedUser = AsyncErrorHandler(
-  async (req, res, next) => {
-    const token = req.headers["Authorization"].split("Bearer")[1];
-    if (!token) {
-      return next(
-        new ErrorHandler(401, "Please Login to access this Resource")
-      );
-    }
+module.exports.isAuthenticatedUser = async (req, res, next) => {
+  console.log(req.headers);
+  console.log("samit", token);
 
-    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decodedData.id);
-    next();
+  let token;
+  if (
+    req.headers["Authorization"] &&
+    req.headers["Authorization"].startsWith("Bearer")
+  ) {
+    const token = req.headers["Authorization"]?.split("Bearer")[1];
+  } else {
+    return next(new ErrorHandler(401, "Please Login to access this Resource"));
   }
-);
+
+  const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+  req.user = await User.findById(decodedData.id);
+  next();
+};
 
 module.exports.isAdmin = (req, res, next) => {
   console.log(req.user);
