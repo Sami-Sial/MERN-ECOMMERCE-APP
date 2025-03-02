@@ -12,7 +12,8 @@ export const signup = createAsyncThunk(
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      console.log(data);
+      console.log(data.token);
+      localStorage.setItem("token", data.token);
       return data;
     } catch (error) {
       console.log(error);
@@ -31,7 +32,8 @@ export const login = createAsyncThunk("login", async ({ email, password }) => {
       { headers: { "Content-Type": "application/json" } }
     );
 
-    console.log(data);
+    console.log(data.token);
+    localStorage.setItem("token", data.token);
     return data;
   } catch (error) {
     console.log(error);
@@ -48,6 +50,7 @@ export const logout = createAsyncThunk("logout", async () => {
     );
 
     console.log(data);
+    localStorage.setItem("token", "");
     return data;
   } catch (error) {
     console.log(error.message);
@@ -59,7 +62,8 @@ export const logout = createAsyncThunk("logout", async () => {
 export const loadUser = createAsyncThunk("loadUser", async () => {
   try {
     const { data } = await axios.get(
-      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/me"
+      "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/me",
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     console.log(data);
     return data;
@@ -79,7 +83,10 @@ export const updateProfile = createAsyncThunk(
         "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/me/update",
         sendedData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: [
+            { "Content-Type": "multipart/form-data" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
         }
       );
 
@@ -100,7 +107,12 @@ export const updatePassword = createAsyncThunk(
       const { data } = await axios.put(
         `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/password/update`,
         { oldPassword, newPassword, confirmPassword },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: [
+            { "Content-Type": "application/json" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
+        }
       );
 
       console.log(data);
@@ -120,7 +132,12 @@ export const forgotPassword = createAsyncThunk(
       const { data } = await axios.post(
         `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/password/forgot`,
         { email },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: [
+            { "Content-Type": "application/json" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
+        }
       );
 
       console.log(data);
@@ -140,7 +157,12 @@ export const resetPassword = createAsyncThunk(
       const { data } = await axios.put(
         `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/password/reset/${token}`,
         { token, password, confirmPassword },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: [
+            { "Content-Type": "application/json" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
+        }
       );
 
       console.log(data);

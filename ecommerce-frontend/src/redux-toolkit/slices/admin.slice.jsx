@@ -6,7 +6,10 @@ export const getAllOrders = createAsyncThunk(
   async (currentPage) => {
     try {
       const { data } = await axios.get(
-        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/orders?currentPage=${currentPage}, {credentials: "include"}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/orders?currentPage=${currentPage}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       console.log(data);
       return data;
@@ -20,7 +23,8 @@ export const getAllOrders = createAsyncThunk(
 export const processOrder = createAsyncThunk("processOrder", async (id) => {
   try {
     const { data } = await axios.put(
-      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/order/${id}, {credentials: "include"}`
+      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/order/${id}`,
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     console.log(data);
     return data;
@@ -33,7 +37,8 @@ export const processOrder = createAsyncThunk("processOrder", async (id) => {
 export const deleteOrder = createAsyncThunk("deleteOrder", async (id) => {
   try {
     const { data } = await axios.delete(
-      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/order/${id}, {credentials: "include"}`
+      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/order/${id}`,
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     console.log(data);
     return data;
@@ -48,7 +53,10 @@ export const getAllUsers = createAsyncThunk(
   async (currentPage) => {
     try {
       const { data } = await axios.get(
-        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/users?currentPage=${currentPage}, {credentials: "include"}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/users?currentPage=${currentPage}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       console.log(data);
       return data;
@@ -64,7 +72,7 @@ export const deleteUser = createAsyncThunk("deleteUser", async (id) => {
     const { data } = await axios.delete(
       "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/user/" +
         id,
-      { credentials: "include" }
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     console.log(data);
     return data;
@@ -81,9 +89,13 @@ export const updateUserRole = createAsyncThunk(
       const { data } = await axios.put(
         "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/user/" +
           id,
-        { credentials: "include" },
         { id, role },
-        { headers: { "Content-Type": "application/json" } }
+        {
+          headers: [
+            { "Content-Type": "application/json" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
+        }
       );
       console.log(data);
       return data;
@@ -99,7 +111,10 @@ export const getAdminProducts = createAsyncThunk(
   async (currentPage) => {
     try {
       const { data } = await axios.get(
-        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/products?currentPage=${currentPage}, {credentials: "include"}`
+        `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/products?currentPage=${currentPage}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       console.log(data);
       return data;
@@ -117,9 +132,13 @@ export const createProduct = createAsyncThunk(
     try {
       const { data } = await axios.post(
         "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/new",
-        { credentials: "include" },
         { name, price, description, category, stock, images },
-        { headers: { "Content-Type": "multipart/form-data" } }
+        {
+          headers: [
+            { "Content-Type": "multipart/form-data" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
+        }
       );
       console.log(data);
       return data;
@@ -140,9 +159,11 @@ export const updateProduct = createAsyncThunk(
         "https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/" +
           id,
         myForm,
-        { credentials: "include" },
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: [
+            { "Content-Type": "multipart/form-data" },
+            { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          ],
         }
       );
       console.log(data);
@@ -158,7 +179,8 @@ export const updateProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk("deleteProduct", async (id) => {
   try {
     const { data } = await axios.delete(
-      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/${id},, {credentials: "include"}`
+      `https://mern-ecommerce-app-backend-bice.vercel.app/api/v1/admin/product/${id}`,
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
     console.log(data);
     return data;

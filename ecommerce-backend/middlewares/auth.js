@@ -17,9 +17,7 @@ const User = require("../models/user.model");
 
 module.exports.isAuthenticatedUser = AsyncErrorHandler(
   async (req, res, next) => {
-    console.log(req.cookies, "sami");
-
-    const { token } = req.cookies;
+    const token = req.headers["Authorization"].split("Bearer")[1];
     if (!token) {
       return next(
         new ErrorHandler(401, "Please Login to access this Resource")
