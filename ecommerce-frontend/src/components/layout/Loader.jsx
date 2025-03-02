@@ -1,5 +1,4 @@
-import Spinner from "react-bootstrap/Spinner";
-
+import CircularProgress from "@mui/material/CircularProgress";
 const Loader = () => {
   return (
     <>
